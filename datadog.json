@@ -1,0 +1,441 @@
+
+{
+  "title": "🏦 Banking CRM - Insight Dashboard",
+  "description": "Executive Banking CRM Observability Dashboard",
+  "layout_type": "ordered",
+  "widgets": [
+    {
+      "definition": {
+        "title": "👤 Active Users",
+        "type": "query_value",
+        "autoscale": true,
+        "precision": 0,
+        "requests": [
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "active_users",
+                "search": {
+                  "query": "@type:view"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      }
+    },
+    {
+      "definition": {
+        "title": "📄 Total Views",
+        "type": "query_value",
+        "autoscale": true,
+        "precision": 0,
+        "requests": [
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "total_views",
+                "search": {
+                  "query": "@type:view"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "layout": {
+        "x": 3,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      }
+    },
+    {
+      "definition": {
+        "title": "⚠ Error Count",
+        "type": "query_value",
+        "autoscale": true,
+        "precision": 0,
+        "requests": [
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "errors",
+                "search": {
+                  "query": "@type:error"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "layout": {
+        "x": 6,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      }
+    },
+    {
+      "definition": {
+        "title": "🚀 Avg Load Time",
+        "type": "query_value",
+        "autoscale": true,
+        "precision": 2,
+        "requests": [
+          {
+            "response_format": "scalar",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "avg_duration",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "avg",
+                  "metric": "@resource.duration"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "layout": {
+        "x": 9,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      }
+    },
+    {
+      "definition": {
+        "title": "📈 Resource Load Over Time",
+        "show_legend": true,
+        "type": "timeseries",
+        "requests": [
+          {
+            "response_format": "timeseries",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "resource_load",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ],
+            "display_type": "line"
+          }
+        ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 2,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "🕒 Avg Load Time Over Time",
+        "show_legend": true,
+        "type": "timeseries",
+        "requests": [
+          {
+            "response_format": "timeseries",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "avg_load_time",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "avg",
+                  "metric": "@resource.duration"
+                }
+              }
+            ],
+            "display_type": "line"
+          }
+        ]
+      },
+      "layout": {
+        "x": 6,
+        "y": 2,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "📊 Resource Time Distribution",
+        "show_legend": true,
+        "type": "timeseries",
+        "requests": [
+          {
+            "response_format": "timeseries",
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "p75",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "pc75",
+                  "metric": "@resource.duration"
+                }
+              },
+              {
+                "data_source": "rum",
+                "name": "p90",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "pc90",
+                  "metric": "@resource.duration"
+                }
+              },
+              {
+                "data_source": "rum",
+                "name": "p95",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "compute": {
+                  "aggregation": "pc95",
+                  "metric": "@resource.duration"
+                }
+              }
+            ],
+            "display_type": "line"
+          }
+        ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 6,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "🏦 Resource Time by FIID (Top 10)",
+        "type": "toplist",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "fiid_perf",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "group_by": [
+                  {
+                    "facet": "@usr.name",
+                    "limit": 10
+                  }
+                ],
+                "compute": {
+                  "aggregation": "pc90",
+                  "metric": "@resource.duration"
+                }
+              }
+            ],
+            "response_format": "scalar"
+          }
+        ]
+      },
+      "layout": {
+        "x": 6,
+        "y": 6,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "🗂 Most Popular Pages",
+        "type": "toplist",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "popular_pages",
+                "search": {
+                  "query": "@type:view"
+                },
+                "indexes": ["*"],
+                "group_by": [
+                  {
+                    "facet": "@view.name",
+                    "limit": 10
+                  }
+                ],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ],
+            "response_format": "scalar"
+          }
+        ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 10,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "🖱 Top User Actions",
+        "type": "toplist",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "top_actions",
+                "search": {
+                  "query": "@type:action"
+                },
+                "indexes": ["*"],
+                "group_by": [
+                  {
+                    "facet": "@action.name",
+                    "limit": 10
+                  }
+                ],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ],
+            "response_format": "scalar"
+          }
+        ]
+      },
+      "layout": {
+        "x": 6,
+        "y": 10,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "🔥 Slowest APIs",
+        "type": "toplist",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "slow_apis",
+                "search": {
+                  "query": "@type:resource"
+                },
+                "indexes": ["*"],
+                "group_by": [
+                  {
+                    "facet": "@resource.name",
+                    "limit": 10
+                  }
+                ],
+                "compute": {
+                  "aggregation": "pc95",
+                  "metric": "@resource.duration"
+                }
+              }
+            ],
+            "response_format": "scalar"
+          }
+        ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 14,
+        "width": 6,
+        "height": 4
+      }
+    },
+    {
+      "definition": {
+        "title": "⚠ Errors By Type",
+        "type": "treemap",
+        "requests": [
+          {
+            "queries": [
+              {
+                "data_source": "rum",
+                "name": "errors_by_type",
+                "search": {
+                  "query": "@type:error"
+                },
+                "indexes": ["*"],
+                "group_by": [
+                  {
+                    "facet": "@error.message",
+                    "limit": 10
+                  }
+                ],
+                "compute": {
+                  "aggregation": "count"
+                }
+              }
+            ],
+            "response_format": "scalar"
+          }
+        ]
+      },
+      "layout": {
+        "x": 6,
+        "y": 14,
+        "width": 6,
+        "height": 4
+      }
+    }
+  ]
+}
